@@ -1,2 +1,4 @@
 *.webm
 DEMO_key.pem
+__pycache__
+venv
