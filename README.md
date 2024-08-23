@@ -1,52 +1,75 @@
-# Email Services
+# Display Chart
 
-Email integrations provide an easy, cost-effective way to send and
-receive emails for various use cases (e.g., marketing, notifications,
-order confirmations, etc.). Email solutions are available in different
-"flavours", which may employ on-prem infrastructure and software
-(Microsoft Exchange), private cloud services (AWS, Azure, etc.), or
-third-party service parties (SendGrid).
+We will build a GUI to display a set of values. You will display the values using both a line chart and a bar chart on the same app. You will implement the following:
 
-## Exercise – Notification Emails via Gmail
+1. In the constructor create a list of 20 values from your generator class in **Lab Assignment 6**. This will not change for the life of the application.
 
-Augment the functionality of the Display application built for Lab 7 by
-sending an email when the user enters a number value beyond the normal
-range. The email notification must capture and record the user’s input
-that is too low or high and send an email notification via Gmail. Note:
-Create a temporary Gmail account for the group to utilize. Implement the
-code with the standard SMTP library.
+2. In the initUI() method do the following:
+    - Add the code that will create the three widgets at the top of the window as shown in the screenshot below.
+    - Call the method below that will draw the rectangles and lines as shown in the screenshot.
+    - Wire-up the button to read the input from the textbox and call the method in step 3 with the appropriate arguments.
 
-## Exercise – Notification Emails via AWS
+3. Define a method that takes the start values (the list of values is available as a class attribute) and will draw the six rectangles and the lines.
 
-To continue the exploration of cloud computing and networks via Amazon
-Web Services (AWS), deploy and configure Amazon Simple Email Service
-(SES). Follow the following tutorial: [Send an Email with Amazon
-SES](https://aws.amazon.com/getting-started/hands-on/send-an-email-with-amazon-ses/)
-to get started.
+![](media/image1.png)
 
-Subsequently, leverage the [AWS SDK for Python (Boto3) for
-SES](https://docs.aws.amazon.com/ses/latest/dg/send-an-email-using-sdk-programmatically.html)
-to send an email programmatically when the user enters a number value
-beyond the normal range in the Display application (built for Lab 7).
-The email notification must capture and record the user’s input that is
-too low or high.
+![](media/image2.png)
 
-Upload a recording demonstrating the email connectivity for both
-exercises.
+![](media/image3.png)
 
-***Submission***
+## Requirements
 
-1. You must use only the libraries that are available in the standard
-    Python distribution (unless specified by the instructor).
+1. You will use the same quantity that you selected in the previous lab (from temperature, humidity, barometric pressure, customers at a mall, or just with an alternate descriptor).
+2. Design and build a GUI application class that will model a display for your sensor reasonably well.
+3. You must provide an Entry (Textbox) and a button to read the value and call the method to draw the rectangles and lines.
+4. There are marks for aesthetics.
 
-2. Your code file will be named
-    group\_«your_group_number»\_email_service.py e.g., group_1\_
-    email_service.py.
+See the appendix of the previous week lab for some code sample and possible directions to explore.
 
-3. Must be uploaded to course dropbox before the deadline.
+### Submission
 
-4. See schedule for due date.
+1. Your code file will be named `group_«your_group_number»_display_chart.py` (e.g., `group_1_display_chart.py`).
 
-***Rubrics***
+### Rubrics
 
-See requirements above.
+| **Class** | 4/4 |
+|-----------|-----|
+| **unitUI Method** | 3/3 |
+| **Button Handler** | 2/2 |
+| **Draw rectangle** | 6/6 |
+| **Gui** | 2/2 |
+| **Aesthetics** | 3/3 |
+| **Total** | **20/20** |
+
+## Appendix
+
+Because you will be drawing multiple rectangles and lines on your canvas, you will have to "clear the output". There are two suggested techniques:
+
+1. Remove the canvas from your Tkinter app. So, to draw you will have to create a new canvas and re-draw your rectangles etc. This is not a bad option, but if you must redraw axis and other embellishments, it might be too expensive.  
+   Code to remove a canvas widget:
+
+   ```python
+   self.canvas = Canvas(«host_container»)  # reference to the canvas
+   «host_container».delete(self.canvas)
+   ```
+
+2. A slightly more efficient approach is to remove all the items in the canvas.  
+   Code to remove the items:
+
+   ```python
+   self.canvas = Canvas(«host_container»)  # reference to the canvas
+   self.canvas.delete('all')  # clears the canvas
+   ```
+
+3. Another option is to remove just the temporary items. This is more efficient but slightly little more complicated.  
+   Code to remove the items:
+
+   ```python
+   self.items = []  # this will store all temp items
+   self.canvas = Canvas(«host_container»)  # reference to the canvas
+   self.items.append(self.canvas.create_text(«left», «top», text='some text'))  # add a temp item
+   self.items.append(self.canvas.create_line(«left», «top», «right», «bottom»))  # add another temp item
+   for item in self.items:
+       self.canvas.delete(item)  # remove each item
+   self.items = []  # re-initialize the temp storage
+   ```
