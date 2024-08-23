@@ -1,3 +1,4 @@
+import os
 from tkinter import (
     ARC,
     BOTH,
@@ -15,6 +16,12 @@ from tkinter import (
     messagebox,
 )
 from tkinter.ttk import Button, Style
+
+from dotenv import load_dotenv
+from group_2_email_service import GmailService
+
+# Load environment variables from a .env file
+load_dotenv()
 
 
 class DisplayGauge(Tk):
@@ -230,17 +237,23 @@ class DisplayGauge(Tk):
 
     def update_view(self):
         try:
-
-            # Check if the input value is out of bounds
+            # Check if the input value is out of bounds and send an email
             if self.value.get() < 0 or self.value.get() > 80:
-
-                # Show a warning message if the value is out of bounds
-                messagebox.showwarning(
-                    "Warning: Out of bound input value",
-                    f"The input value {self.value.get()} is outside the normal display range from 0 to 80.",
+                gmail_smtp = GmailService(
+                    os.getenv("GMAIL_USER"),
+                    os.getenv("GMAIL_PASSWORD"),
+                    os.getenv("RECIPIENT_EMAIL"),
+                )
+                gmail_smtp.set_subject("Warning: Out of bound input value")
+                gmail_smtp.set_body(
+                    user_input=self.value.get(), normal_low=0, normal_high=80
+                )
+                gmail_smtp.send_email()
+                messagebox.showinfo(
+                    "Email Sent",
+                    "Please check the email!",
                 )
             else:
-
                 # Update the pointer position on the gauge
                 if self.pointer is not None:
                     self.canvas.delete(self.pointer)

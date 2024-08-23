@@ -2,6 +2,12 @@ import os
 import tkinter as tk
 from tkinter import messagebox, ttk
 
+from group_2_email_service import AmazonService
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
 
 class DisplayBar(tk.Tk):
 
@@ -10,6 +16,7 @@ class DisplayBar(tk.Tk):
     _max_temp = 27
     _SENDER = os.getenv("AWS_EMAIL")
     _RECIPIENT = os.getenv("RECIPIENT_EMAIL")
+    _my_amazon_service = None
 
     def __init__(self):
         super().__init__()
@@ -77,6 +84,10 @@ class DisplayBar(tk.Tk):
         self.draw_temperature()
         self.draw_temp_pointer(10)
 
+        # Initialize the AmazonService object for sending emails
+        self._my_amazon_service = AmazonService(self._SENDER, self._RECIPIENT)
+        self._my_amazon_service.set_subject("Warning: Out of bound input value")
+
     def draw_chart(self):
         """
         Draw the line chart on the canvas.
@@ -110,11 +121,15 @@ class DisplayBar(tk.Tk):
         try:
             new_value = int(self.value_entry.get())
 
-            # Check if the new value is out of bounds and display a warning if necessary
+            # Check if the new value is out of bounds and send an email
             if new_value < self._min_temp or new_value > self._max_temp:
-                messagebox.showwarning(
-                    "Warning: Out of bound input value",
-                    f"The input value {new_value} is outside the normal display range from {self._min_temp} to {self._max_temp}.",
+                self._my_amazon_service.set_body(
+                    new_value, self._min_temp, self._max_temp
+                )
+                self._my_amazon_service.send_email()
+                messagebox.showinfo(
+                    "Email Sent",
+                    "Please check the email!",
                 )
 
             # Add the new value to the list
