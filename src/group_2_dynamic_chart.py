@@ -1,7 +1,8 @@
-import tkinter as tk
-from tkinter import ttk, font
 import threading
 import time
+import tkinter as tk
+from tkinter import font, ttk
+
 from group_2_data_generator import DataGenerator
 
 

@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+
 from group_2_data_generator import DataGenerator
 
 

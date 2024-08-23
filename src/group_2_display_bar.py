@@ -2,8 +2,9 @@ import os
 import tkinter as tk
 from tkinter import messagebox, ttk
 
-from group_2_email_service import AmazonService
 from dotenv import load_dotenv
+
+from group_2_email_service import AmazonService
 
 # Load environment variables from .env file
 load_dotenv()

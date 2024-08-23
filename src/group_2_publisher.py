@@ -1,6 +1,8 @@
 import json
-import paho.mqtt.client as mqtt
 import time
+
+import paho.mqtt.client as mqtt
+
 from group_2_util import create_data
 
 

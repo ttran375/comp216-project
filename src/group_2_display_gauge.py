@@ -18,6 +18,7 @@ from tkinter import (
 from tkinter.ttk import Button, Style
 
 from dotenv import load_dotenv
+
 from group_2_email_service import GmailService
 
 # Load environment variables from a .env file
